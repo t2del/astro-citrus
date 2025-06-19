@@ -1,5 +1,5 @@
 {
-  "name": "nuclear-neutron",
+  "name": "my-astro-site",
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
