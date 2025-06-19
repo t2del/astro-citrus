@@ -1,0 +1,366 @@
+---
+// src/components/QuizComponent.astro
+
+// Note: For purely client-side interactive components like this,
+// the data is defined directly within the <script is:inline> block below.
+---
+
+<div id="ehs-quiz-container" class="ehs-quiz-container">
+  <div id="quiz-intro" class="quiz-section active title ml-2 md:top-4 md:z-20">
+    <h2>EHS Interactive Quiz</h2>
+    <p>Answer a few simple questions to get an indication of your lifestyle habits and find out which health screening package might be suitable for you.</p>
+    <button id="start-quiz-btn" class="quiz-button">Start Quiz</button>
+  </div>
+
+  <div id="quiz-questions" class="quiz-section">
+    <div id="question-display">
+      <h3 id="question-text" class="title ml-2 md:top-4 md:z-20"></h3>
+      <form id="options-form" class="quiz-options"></form>
+    </div>
+    <div class="quiz-navigation-buttons">
+        <button id="prev-question-btn" class="quiz-button" style="display: none;">Previous</button>
+        <button id="next-question-btn" class="quiz-button" disabled>Next</button>
+    </div>
+  </div>
+
+  <div id="quiz-results" class="quiz-section">
+    <h2 class="title ml-2 md:top-4 md:z-20">Your Quiz Results</h2>
+    <p>Based on your age, here is your recommended health screening package:</p>
+    <h3 id="result-heading"></h3>
+    <p id="result-advice"></p>
+    <p>Recommended Package: <strong id="recommended-package"></strong></p>
+    <button id="restart-quiz-btn" class="quiz-button">Restart Quiz</button>
+  </div>
+</div>
+
+<style is:inline>
+  /* Basic styling for the quiz component.
+     For production, consider external CSS or a robust CSS-in-JS solution.
+  */
+  .ehs-quiz-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .quiz-section {
+    display: none; /* Hidden by default, managed by JS */
+  }
+
+  .quiz-section.active {
+    display: block;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  h3 {
+
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  /* Styling for the navigation buttons container */
+  .quiz-navigation-buttons {
+    display: flex;
+    justify-content: space-between; /* Pushes buttons to ends */
+    margin-top: 20px;
+    gap: 10px; /* Space between buttons */
+  }
+
+  .quiz-button {
+    flex: 1; /* Allows buttons to grow and shrink equally within the flex container */
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /* Removed display: block; width: 100%; to allow flexbox to control sizing */
+  }
+
+  .quiz-button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+
+  .quiz-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .quiz-options input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2); /* Slightly larger radio buttons */
+    opacity: 0;
+    position: fixed;
+    width: 0;
+  }
+
+  .quiz-options input[type="radio"]:checked + span {
+    font-weight: bold;
+    color: #007bff; /* Highlight text of selected option */
+  }
+    .quiz-options label.quiz-option-label span {
+        display: inline-block;
+        background-color: #ddd;
+        padding: 10px 20px;
+        font-family: sans-serif, Arial;
+        font-size: 16px;
+        border: 2px solid #c6c6c6;
+        border-radius: 5px;
+        margin: 5px 5px;
+        cursor: pointer;
+        min-width: 150px;
+        text-align: center;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .quiz-options label.quiz-option-label span:hover {
+        background-color: #e9ecef;
+        border-color: #007bff; /* Highlight border on hover */
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    /* This rule is redundant and can be removed or expanded if needed */
+    .quiz-options input[type="radio"] {
+
+    }
+</style>
+
+<script is:inline>
+  // Define your quiz questions and options using the provided basis
+  const quizQuestions = [
+    {
+      id: 'gender',
+      question: "Please indicate your gender",
+      options: [
+        { text: "Female", key: 'gender_female' },
+        { text: "Male", key: 'gender_male' }
+      ]
+    },
+    {
+      id: 'age', // This ID is crucial for the age-based package logic
+      question: "Please select your age group",
+      options: [
+        { text: "18 to 29", key: '18 to 29' }, // Key matches age string for result logic
+        { text: "30 to 39", key: '30 to 39' },
+        { text: "40 to 49", key: '40 to 49' },
+        { text: "50 and above", key: '50 and above' }
+      ]
+    },
+    {
+      id: 'familyHistory',
+      question: "Do you have any family history of chronic diseases (ie: Hypertension/Diabetes/High cholesterol)",
+      options: [
+        { text: "Yes", key: 'family_history_yes' },
+        { text: "No", key: 'family_history_no' }
+      ]
+    }
+  ];
+
+  // Define your package details (these are examples, adjust as needed)
+  const packagePremium = {
+    heading: "Fuller Life - Premium",
+    advice: "Fuller Life Premium is a screening for lifestyle diseases. A diagnosis made at an early age can prevent serious illness in the future. This package is tailored towards young adults. It provides an understanding of an individual’s health condition to avoid common health risks.",
+    name: "Premium"
+  };
+
+  const packageGold = {
+    heading: "Fuller Life - Gold",
+    advice: "Fuller Life Gold tailors to your age group and lifestyle where early detection is fundamental. Early detection can improve the quality of health and life. It is recommended to determine the health risks that may develop over time including chronic diseases - high blood pressure, high cholesterol and diabetes.\nFor ladies, a choice of Ultrasound Breast or Ultrasound Pelvis is available and a choice of Ultrasound Prostate or Treadmill test for the men.",
+    name: "Gold"
+  };
+
+  const packageSapphire = {
+    heading: "Fuller Life - Sapphire",
+    advice: "Fuller Life Sapphire tailors to your age group and lifestyle where early detection is fundamental. Early detection can improve the quality of health and life. It is recommended to determine the health risks that may develop over time including chronic diseases - high blood pressure, cholesterol and diabetes. \nFor ladies, a choice of Ultrasound Breast, Ultrasound Pelvis, Mammogram or Cervical Cancer Screening – HPV DNA is available and a choice of Ultrasound Prostate or Treadmill test for the men. This package includes tonometry, a screening that checks if you are at risk of glaucoma.",
+    name: "Sapphire"
+  };
+
+  const packagePlatinum = {
+    heading: "Fuller Life - Platinum",
+    advice: "Fuller Life Platinum provides a thorough and comprehensive assessments of several aspects of your health. This package will aid and improve your health and lifestyle goals.\n\nFor ladies, a choice of Ultrasound Breast, Ultrasound Pelvis and Mammogram is available and a choice of Ultrasound Prostate or Treadmill for the men. This package includes a comprehensive set of tumour markers and anti nuclear antibody.\n\nIn addition, it comprises of one of the following choices –\nCT Cardiac Calcium score : to measure the risk of developing heart disease\nCT Lung Screen : to diagnose lung cancer at a very early stage\nHPV DNA test : to screen for Cervical Cancer\nGastro Clear: Gastric Cancer Screening : Simplifies Stomach Cancer detection by using a blood test to assess stomach cancer risk before symptoms appear.\nBone Densitometry : to determine risk for osteoporosis",
+    name: "Platinum"
+  };
+
+
+  let currentQuestionIndex = 0;
+  // Stores user's selected answer for each question: { questionId: { selectedOptionKey: 'key' } }
+  let userAnswers = {};
+
+  // Get references to DOM elements
+  const quizIntro = document.getElementById('quiz-intro');
+  const quizQuestionsSection = document.getElementById('quiz-questions');
+  const quizResultsSection = document.getElementById('quiz-results');
+
+  const startQuizBtn = document.getElementById('start-quiz-btn');
+  const nextQuestionBtn = document.getElementById('next-question-btn');
+  const prevQuestionBtn = document.getElementById('prev-question-btn'); // New reference
+  const restartQuizBtn = document.getElementById('restart-quiz-btn');
+
+  const questionTextElem = document.getElementById('question-text');
+  const optionsForm = document.getElementById('options-form');
+
+  const resultHeadingElem = document.getElementById('result-heading');
+  const resultAdviceElem = document.getElementById('result-advice');
+  const recommendedPackageElem = document.getElementById('recommended-package');
+
+  /**
+   * Controls which quiz section is visible.
+   * @param {string} sectionId - The ID of the section to show ('quiz-intro', 'quiz-questions', 'quiz-results').
+   */
+  function showSection(sectionId) {
+    document.querySelectorAll('.quiz-section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+  }
+
+  /**
+   * Renders the current question and its options to the DOM.
+   */
+  function renderQuestion() {
+    const question = quizQuestions[currentQuestionIndex];
+    if (!question) {
+      showResults(); // If no more questions, show results
+      return;
+    }
+
+    questionTextElem.textContent = `Q${currentQuestionIndex + 1}. ${question.question}`;
+    optionsForm.innerHTML = ''; // Clear previous options
+
+    question.options.forEach(option => {
+      const label = document.createElement('label');
+      label.className = 'quiz-option-label'; // Add a class to the label element
+      const input = document.createElement('input');
+      input.className = 'quiz-option-input'; // Add a class to the input element
+      input.type = 'radio';
+      input.name = `question-${question.id}`; // Group radio buttons for this question
+      input.value = option.key; // Unique key for the option (e.g., age range or option ID)
+
+      // Check if this option was previously selected
+      if (userAnswers[question.id] && userAnswers[question.id].selectedOptionKey === option.key) {
+        input.checked = true;
+        nextQuestionBtn.disabled = false; // Enable next button if this question already has an answer
+      }
+
+      const span = document.createElement('span');
+      span.textContent = option.text;
+
+      label.appendChild(input);
+      label.appendChild(span);
+      optionsForm.appendChild(label);
+
+      // Add event listener for when an option is selected
+      input.addEventListener('change', (event) => {
+        userAnswers[question.id] = {
+          selectedOptionKey: event.target.value
+        };
+        nextQuestionBtn.disabled = false; // Enable next button on selection
+      });
+    });
+
+    // Handle Previous button visibility
+    if (currentQuestionIndex === 0) {
+      prevQuestionBtn.style.display = 'none';
+    } else {
+      prevQuestionBtn.style.display = 'block'; /* Or 'inline-block' if you want to use it directly without the flex container */
+    }
+
+    // Initially disable the 'Next' button if no answer is selected for the current question
+    if (!userAnswers[question.id] || userAnswers[question.id].selectedOptionKey === undefined) {
+      nextQuestionBtn.disabled = true;
+    } else {
+      nextQuestionBtn.disabled = false;
+    }
+
+    showSection('quiz-questions');
+  }
+
+  /**
+   * Determines and displays the final recommended package based on the age group.
+   */
+  function showResults() {
+    const selectedAge = userAnswers.age ? userAnswers.age.selectedOptionKey : null;
+    let packageDisplay = null;
+
+    if (selectedAge === '18 to 29') {
+      packageDisplay = packagePremium;
+    } else if (selectedAge === '30 to 39') {
+      packageDisplay = packageGold;
+    } else if (selectedAge === '40 to 49') {
+      packageDisplay = packageSapphire;
+    } else if (selectedAge === '50 and above') {
+      packageDisplay = packagePlatinum;
+    } else {
+      // Fallback if age is not selected or unrecognized
+      packageDisplay = {
+        heading: "Unable to Recommend Package",
+        advice: "Please ensure you've selected your age group to receive a personalized package recommendation.",
+        name: "N/A"
+      };
+    }
+
+    resultHeadingElem.textContent = packageDisplay.heading;
+    resultAdviceElem.textContent = packageDisplay.advice;
+    recommendedPackageElem.textContent = packageDisplay.name;
+
+    showSection('quiz-results');
+  }
+
+  /**
+   * Resets the quiz to its initial state.
+   */
+  function resetQuiz() {
+    currentQuestionIndex = 0;
+    userAnswers = {};
+    nextQuestionBtn.disabled = true;
+    // Ensure prev button is hidden on reset
+    prevQuestionBtn.style.display = 'none';
+    showSection('quiz-intro');
+  }
+
+  // Event Listeners
+  startQuizBtn.addEventListener('click', () => {
+    renderQuestion();
+  });
+
+  nextQuestionBtn.addEventListener('click', () => {
+    // Ensure an answer is selected before proceeding (button is disabled if not, but good to double-check)
+    if (userAnswers[quizQuestions[currentQuestionIndex].id]) {
+      if (currentQuestionIndex < quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      } else {
+        showResults(); // End of quiz
+      }
+    }
+  });
+
+  // New event listener for Previous button
+  prevQuestionBtn.addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      renderQuestion();
+    }
+  });
+
+  restartQuizBtn.addEventListener('click', () => {
+    resetQuiz();
+  });
+
+  // Initialize the quiz when the DOM is fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    resetQuiz(); // Set to intro state initially
+  });
+</script>

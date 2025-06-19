@@ -1,0 +1,193 @@
+---
+// BannerSlider.astro
+
+
+interface Props {
+  slides: {
+    imageURL: string;
+    alt: string;
+    header: string;
+    description: string;
+  }[];
+}
+
+const { slides } = Astro.props;
+---
+
+<div class="banner-slider">
+  {slides.map((slide) => (
+    <div class="slide">
+      <div class="image-container">
+        <img src={slide.imageURL} alt={slide.alt} class="banner-image" />
+      </div>
+      <div class="text-overlay">
+        <h2 class="banner-header">{slide.header}</h2>
+        <p class="banner-description">{slide.description}</p>
+      </div>
+    </div>
+  ))}
+</div>
+<div class="navigation-container"> </div>
+<div class="dots">
+    {slides.map((_, index) => (
+      <button class="dot" data-index={index}></button>
+    ))}
+</div>
+ <style is:inline>
+    .banner-slider {
+      position: relative;
+      width: 100%;
+      overflow: hidden; /* Hide overflowing slides */
+      padding-bottom: 50%;
+    }
+    .slide {
+        position: absolute; /* Keep this for the sliding effect */
+        width: 100%;
+        opacity: 0; /* Initially hide all slides using opacity */
+        transition: opacity 0.5s ease-in-out; /* Optional transition for smoother fading */
+    }
+    .slide.active {
+        opacity: 1; /* Make the active slide visible */
+        z-index: 9;
+    }
+    .image-container {
+      width: 100%;
+      height: auto; /* Adjust height as needed or set a fixed value */
+    }
+    .banner-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover; /* Ensure the image covers the container */
+    }
+    .text-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white; /* Adjust text color as needed */
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.5); /* Optional background for better readability */
+      border-radius: 8px; /* Optional rounded corners */
+    }
+
+    .banner-header {
+      font-size: 2em; /* Adjust font size as needed */
+      margin-bottom: 10px;
+    }
+
+    .banner-description {
+      font-size: 1.2em; /* Adjust font size as needed */
+    }
+    .dots {
+        display: flex;
+        gap: 8px; /* Space between dots */
+        justify-content: center;
+        position: relative;
+        z-index: 3;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5); /* Inactive dot color */
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .dot.active {
+    background-color: white; /* Active dot color */
+  }
+</style>
+<script is:inline>
+    const dotsContainer = document.querySelector('.dots');
+    const dots = document.querySelectorAll('.dot');
+    const slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+    let intervalId; // To store the ID of the interval
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+        if (slide instanceof HTMLElement) {
+            slide.classList.remove('active');
+            //slide.classList.add('inactive');
+        if (i === index) {
+            slide.classList.add('active');
+            dots[i]?.classList.add('active');
+            dots[i]?.classList.remove('inactive');
+        } else {
+            dots[i]?.classList.remove('active');
+            dots[i]?.classList.add('inactive');
+        }
+        }
+    });
+    currentIndex = index;
+  }
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        showSlide(currentIndex);
+    }
+  function goToSlide(index) {
+    stopAutoSlide();
+    showSlide(index);
+    startAutoSlide();
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+  }
+
+  function startAutoSlide(delay = 5000) { // Set the delay in milliseconds (e.g., 3000 for 3 seconds)
+    intervalId = setInterval(nextSlide, delay);
+  }
+
+  function stopAutoSlide() {
+    clearInterval(intervalId);
+  }
+  // Event listeners for dots
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(index);
+    });
+  });
+  // Start auto-sliding when the component loads
+  startAutoSlide();
+
+  // Optional: Stop auto-sliding when the user interacts with the slider
+  // You would need to add event listeners to your navigation buttons (if you implement them)
+  // Example:
+  // const slider = document.querySelector('.banner-slider');
+  // slider?.addEventListener('mouseenter', stopAutoSlide);
+  // slider?.addEventListener('mouseleave', startAutoSlide);
+
+  // Basic navigation buttons (optional)
+  const sliderContainer = document.querySelector('.navigation-container');
+  if (sliderContainer) {
+    const nextButton = document.createElement('button');
+    nextButton.textContent = '<';
+    nextButton.classList.add('slider-button', 'next'); // Add some classes for styling
+    nextButton.addEventListener('click', () => {
+      stopAutoSlide(); // Stop auto-sliding on manual navigation
+      nextSlide();
+      startAutoSlide(); // Restart auto-sliding after manual navigation
+    });
+    sliderContainer.appendChild(nextButton);
+
+    const prevButton = document.createElement('button');
+    prevButton.textContent = '>';
+    prevButton.classList.add('slider-button', 'prev'); // Add some classes for styling
+    prevButton.addEventListener('click', () => {
+      stopAutoSlide(); // Stop auto-sliding on manual navigation
+      prevSlide();
+      startAutoSlide(); // Restart auto-sliding after manual navigation
+    });
+    sliderContainer.appendChild(prevButton);
+  }
+
+  // Show the initial slide
+  showSlide(currentIndex);
+</script>

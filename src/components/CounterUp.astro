@@ -1,0 +1,62 @@
+---
+// src/components/CounterDisplay.astro
+interface Props {
+  counter?: number;
+  string?: string;
+  message?: string;
+  logo?: string;
+}
+
+const { counter, string = '', message = '', logo = '' } = Astro.props;
+
+// You might want to add a client-side script to animate the counter
+// This example uses a very basic script for demonstration.
+// For more complex animations or interactions, consider a framework like React, Vue, Svelte,
+// or a dedicated JavaScript file imported using `is:inline` or `is:load`.
+---
+
+<div class="container-counter text-accent-base">
+    {logo && (<img src={logo} class="counter-logo"/>)}
+    <span class="counter title ml-2 md:top-4 md:z-20" data-pagefind-body="" data-target={counter}>0</span>
+    {string  && (<span class="string">{string}</span>)}
+    {message  && (<p class="message mt-2 mb-2 text-lg font-medium">{message}</p>)}
+</div>
+
+<style>
+    .container-counter .counter-logo {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 10px;
+    }   
+    .container-counter {
+        text-align: center;
+    }
+    .container-counter span {
+        font-size: 40px;
+        font-weight: 600;
+        line-height: 46px;
+    }
+</style>
+<script is:inline>
+  // Basic script to animate the counter from 0 to data-target
+  document.addEventListener('DOMContentLoaded', () => {
+    const counters = document.querySelectorAll('.counter');
+
+    counters.forEach(counterSpan => {
+      const target = +counterSpan.getAttribute('data-target');
+      const increment = target / 200; // Adjust for desired animation speed
+
+      let current = 0;
+      const updateCounter = () => {
+        if (current < target) {
+          current += increment;
+          counterSpan.innerText = Math.ceil(current);
+          requestAnimationFrame(updateCounter);
+        } else {
+          counterSpan.innerText = target; // Ensure it lands on the exact target
+        }
+      };
+      updateCounter();
+    });
+  });
+</script>

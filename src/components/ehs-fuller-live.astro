@@ -1,0 +1,942 @@
+---
+// @ts-nocheck
+const tableData = [
+  {
+    package_description: `
+    <div class="col-height-40 flex  plan-container relative">
+        <span class="material-symbols-light--arrow-drop-down"></span>
+        <span class="list-text">Physical Examination by Doctor</span>
+        <div class="details">
+            <div class="elementor-widget-container">
+                <ul>
+                    <li>Examination of Heart, Lungs and Abdomen</li>
+                    <li>Neurological and Musculoskeletal Examination</li>
+                    <li>Blood Pressure Reading</li>
+                </ul>					
+            </div>
+        </div>                    
+    </div>
+`,
+    is_premium: true,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `
+<div class="col-height-40 flex  plan-container relative">
+  <span class="material-symbols-light--arrow-drop-down"></span>
+  <span class="list-text">Clinical Measurements</span>
+	<div class="details">
+	<div class="elementor-widget-container">
+                             <p><strong>Body Composition</strong></p>
+		<p>Height, Weight, Body Mass Index, Body Fat %, Water %, Muscles Mass %, Visceral Fat % &amp; Bone Mass</p>
+                <p></p>
+                <p><strong>Eye check</strong></p>
+                <p>Visual Acuity</p>
+        </div>
+</div>                    </div>
+`,
+    is_premium: true,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Tonometry (Eye Pressure)</span>
+<div class="details tooltip">
+<div class="elementor-widget-container">A test that measures the pressure inside your eye to check if you are at risk of glaucoma.</div>
+</div>                    </div>`,
+    is_premium: false,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Resting Electrocardiogram (ECG)</span>
+<div class="details tooltip">
+<div class="elementor-widget-container">A measurement of the electrical activity of your heart, while at rest, to determine whether there is abnormal activity attributed to certain heart conditions.</div>
+</div>                    </div>`,
+    is_premium: true,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Blood and Urine Investigations (<a href="http://localhost/site/sg/services/glossary/" target="_blank" rel="noopener"><u>Glossary</u></a>)</span>                    </div>`,
+    is_premium: true,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Spirometry</span>
+<div class="details tooltip">
+<div class="elementor-widget-container">A test that measures lung function by measuring the amount of air inhaled and exhaled. It is commonly used to help diagnose asthma, chronic obstructive pulmonary disease (COPD) and conditions that affect breathing capacity.</div>
+</div>                    </div>
+
+`,
+    is_premium: false,
+    is_gold: false,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Digital Brain Function Screen</span>
+<div class="details tooltip">
+<div class="elementor-widget-container">Digital Brain Function Screen is a health screening test designed to assess cognitive function through various digital assessments and tasks. This test are relevant for monitoring brain health as individuals age, helping to address concerns related to memory loss, confusion, and other cognitive issues.</div>
+</div>                    </div>
+
+`,
+    is_premium: false,
+    is_gold: false,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="material-symbols-light--arrow-drop-down"></span>
+<span class="list-text">Choice of 1 of the following tests:</span>
+<div class="details">
+	<div class="elementor-widget-container">
+		<ul>
+			<li class="has-tooltip relative">
+				<span class="list-text">Stress ECG (Treadmill)</span>
+				<div class="sub-tooltip">
+					<p>This test is used to measure and detect heart activity responds when exercising. You will be required to walk/jog on a treadmill while heart activity is monitored. You will need to be in sports attire.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Liver - Fasting</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound requires fasting (no food) for 6-8 hours. Food intake can make it difficult to have a clear image. This procedure may take 15-20mins. This is a non-invasive imaging test to examine the major organs in the liver: liver/ bile duct and Gall bladder</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Prostate – Male</span>
+				<div class="sub-tooltip">
+				<div>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. This procedure may take 15-20mins. This is a non-invasive imaging test to examine any abnormalities, cancer, or other prostate-related conditions.</div>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Kidney, Ureters and Bladder (KUB) ***</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. Subsequently you will be asked to clear your bladder for more images when your bladder is empty. This procedure may take 15-20mins. This is a non-invasive imaging test to examine the kidneys, ureters, and bladder.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Thyroid</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound does not require any pre-preparation. This procedure may take 15-20mins.This is a non-invasive imaging test to examine any abnormalities, cancer, or other thyroid-related conditions.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Pelvis – Female</span>
+<div class="sub-tooltip">
+				<p>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. This procedure may take 15-20mins. This is a non-invasive imaging test to check the female reproductive system for abnormalities.</p>
+			</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Breast – Female</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound does not require any pre-preparation. You are encourage to reschedule this test if you are menstruating, or breast- feeding. The tenderness of breasts during your period may be discomfort, and lactacting breasts can make difficult to have a clear image. This procedure may take 15-20mins. This is a non-invasive imaging test to examine any abnormalities, cancer, or other breast-related conditions.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Mammogram** – Female</span>
+				<div class="sub-tooltip">
+					<p>A mammogram is one of the most reliable screening tool for breast cancer involving x-rays.</p><p>Recommended for ladies, 40 and above</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Cervical Cancer Screening – HPV DNA (female)</span>
+				<div class="sub-tooltip">
+					<p>HPV DNA is a screening test for cervical cancer. The HPV test analyses a small amount of cells taken from the cervix to detect the presence of the human papillomavirus, a virus that can lead to the development of genital warts, abnormal cervical cells or cervical cancer.</p>
+					<p>The sampling procedure for a HPV test is carried out in the same way as a Pap test</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Urea Breath Test - Fasting</span>
+				<div class="sub-tooltip">
+					<p>The urea breath test is used to detect Helicobacter pylori (H. pylori), a type of bacteria that may infect the stomach and is a main cause of ulcers in both the stomach and duodenum. 6 hours of fasting required.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Bone Mass Density (<a href="https://radlink.com.sg/locate-us/" target="_blank">Radlink</a> Paragon)</span>
+				<div class="sub-tooltip">
+					<p>Bone Mineral Density (BMD) helps to diagnose the risk of  osteoporosis (bone disease in which bones become weak and brittle), and estimation of the fracture risk .</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Cervical Spine X-Ray (2 views)</span>
+				<div class="sub-tooltip">
+					<p>Cervical spine x-ray detects the cause of neck, shoulder, upper back or arm pain, as well as tingling, numbness or weakness in the arm or hand.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Digital Brain Function Screening</span>
+				<div class="sub-tooltip">
+					<p>Digital Brain Function Screen is a health screening test designed to assess cognitive function through various digital assessments and tasks. This test are relevant for monitoring brain health as individuals age, helping to address concerns related to memory loss, confusion, and other cognitive issues.</p>
+				</div>
+			</li>
+		</ul>					
+	</div>
+</div>                    </div>
+`,
+    is_premium: false,
+    is_gold: true,
+    is_sapphire: false,
+    is_platinum: false,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="material-symbols-light--arrow-drop-down"></span>
+<span class="list-text">Choice of 2 of the following tests:</span>
+<div class="details">
+	<div class="elementor-widget-container">
+		<ul>
+			<li class="has-tooltip relative">
+				<span class="list-text">Stress ECG (Treadmill)</span>
+				<div class="sub-tooltip">
+					<p>This test is used to measure and detect heart activity responds when exercising. You will be required to walk/jog on a treadmill while heart activity is monitored. You will need to be in sports attire.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Liver - Fasting</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound requires fasting (no food) for 6-8 hours. Food intake can make it difficult to have a clear image. This procedure may take 15-20mins. This is a non-invasive imaging test to examine the major organs in the liver: liver/ bile duct and Gall bladder</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Prostate – Male</span>
+				<div class="sub-tooltip">
+				<div>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. This procedure may take 15-20mins. This is a non-invasive imaging test to examine any abnormalities, cancer, or other prostate-related conditions.</div>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Kidney, Ureters and Bladder (KUB) ***</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. Subsequently you will be asked to clear your bladder for more images when your bladder is empty. This procedure may take 15-20mins. This is a non-invasive imaging test to examine the kidneys, ureters, and bladder.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Thyroid</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound does not require any pre-preparation. This procedure may take 15-20mins.This is a non-invasive imaging test to examine any abnormalities, cancer, or other thyroid-related conditions.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Pelvis – Female</span>
+<div class="sub-tooltip">
+				<p>This ultrasound requires a full bladder. You will be asked to drink 4-6 glasses of water, and it takes 30mins to fill up your bladder. This procedure may take 15-20mins. This is a non-invasive imaging test to check the female reproductive system for abnormalities.</p>
+			</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Ultrasound Breast – Female</span>
+				<div class="sub-tooltip">
+					<p>This ultrasound does not require any pre-preparation. You are encourage to reschedule this test if you are menstruating, or breast- feeding. The tenderness of breasts during your period may be discomfort, and lactacting breasts can make difficult to have a clear image. This procedure may take 15-20mins. This is a non-invasive imaging test to examine any abnormalities, cancer, or other breast-related conditions.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Mammogram** – Female</span>
+				<div class="sub-tooltip">
+					<p>A mammogram is one of the most reliable screening tool for breast cancer involving x-rays.</p><p>Recommended for ladies, 40 and above</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Cervical Cancer Screening – HPV DNA (female)</span>
+				<div class="sub-tooltip">
+					<p>HPV DNA is a screening test for cervical cancer. The HPV test analyses a small amount of cells taken from the cervix to detect the presence of the human papillomavirus, a virus that can lead to the development of genital warts, abnormal cervical cells or cervical cancer.</p>
+					<p>The sampling procedure for a HPV test is carried out in the same way as a Pap test</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Urea Breath Test - Fasting</span>
+				<div class="sub-tooltip">
+					<p>The urea breath test is used to detect Helicobacter pylori (H. pylori), a type of bacteria that may infect the stomach and is a main cause of ulcers in both the stomach and duodenum. 6 hours of fasting required.</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Bone Mass Density (<a href="https://radlink.com.sg/locate-us/" target="_blank">Radlink</a> Paragon)</span>
+				<div class="sub-tooltip">
+					<p>Bone Mineral Density (BMD) helps to diagnose the risk of  osteoporosis (bone disease in which bones become weak and brittle), and estimation of the fracture risk .</p>
+				</div>
+			</li>
+			<li class="has-tooltip relative">
+				<span class="list-text">Cervical Spine X-Ray (2 views)</span>
+				<div class="sub-tooltip">
+					<p>Cervical spine x-ray detects the cause of neck, shoulder, upper back or arm pain, as well as tingling, numbness or weakness in the arm or hand.</p>
+				</div>
+			</li>
+		</ul>					
+	</div>
+</div>                    </div>
+`,
+    is_premium: false,
+    is_gold: false,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="material-symbols-light--arrow-drop-down"></span>
+<span class="list-text">Choice of 1 of the following tests:</span>
+<div class="details">
+	<div class="elementor-widget-container">
+		<ul>
+					<li class="has-tooltip relative">
+			<span class="list-text">Heart Scan - CT Cardiac Calcium Score (Radlink Paragon &amp; Novena)</span>
+			<div class="sub-tooltip">
+				<p>** [no caffeine or alcoholic intake, can eat lightly]</p>
+				<p>This score calculates the amount of calcified plaque in your coronary arteries and determines your risk of developing Coronary Artery Disease (CAD).</p>
+			</div>
+		</li>
+		<li class="has-tooltip relative">
+			<span class="list-text">CT Lung Screen (Radlink Paragon &amp; Novena)</span>
+			<div class="sub-tooltip">
+				<p>CT Lung Screen is an examination of one's lungs, to diagnose lung cancer at a very early stage.</p>
+			</div>
+		</li>
+		<li class="has-tooltip relative">
+			<span class="list-text">Osteoporosis Screening – Bone Mass Density (Radlink Paragon) + Vitamin D Total</span>
+			<div class="sub-tooltip">
+			<p>Measurement of Bone Mineral Density (BMD) + Vitamin D2/D3 levels helps determine risk for osteoporosis (bone disease in which bones become weak).</p>
+			</div>
+		</li>
+		<li class="has-tooltip relative">
+			<span class="list-text">Gastro Clear: Gastric Cancer Screening</span>
+			<div class="sub-tooltip">
+				<p>Simplifies Stomach Cancer detection by using a blood test to assess stomach cancer risk before symptoms appear.</p>
+			</div>
+		</li>
+		<li class="has-tooltip relative">
+			<span class="list-text">CT Renal Colic Screen (Radlink Paragon &amp; Novena)</span>
+			<div class="sub-tooltip">
+				<p>CT renal colic screen is an examination of suspected kidney stone, which provides the location and size of the stone</p>
+			</div>
+		</li>
+		</ul>					
+	</div>
+</div>                    </div>
+`,
+    is_premium: false,
+    is_gold: false,
+    is_sapphire: false,
+    is_platinum: true,
+  },
+  {
+    package_description: `<div class="col-height-40 flex  plan-container relative">
+                        <span class="list-text">Medical Report and Medical Review*</span>                    </div>`,
+    is_premium: true,
+    is_gold: true,
+    is_sapphire: true,
+    is_platinum: true,
+  },
+];
+
+const price = {
+  premium: {
+    title: 'Premium',
+    mobile_desc_header: 'Premium Package Details',
+    before_gst: '688',
+    after_gst: '742',
+  },
+  gold: {
+    title: 'Gold',
+    mobile_desc_header: 'Gold Package Details',
+    before_gst: '1188',
+    after_gst: '1282',
+  },
+  sapphire: {
+    title: 'Sapphire',
+    mobile_desc_header: 'Sapphire Package Details',
+    before_gst: '1688',
+    after_gst: '1822',
+  },
+  platinum: {
+    title: 'Platinum',
+    mobile_desc_header: 'Platinum Package Details',
+    before_gst: '2688',
+    after_gst: '2892',
+  },
+};
+---
+<section id="customtable" class="customtable">
+  <div class="table-container">
+    <div class="table-column package-details tc-width-40 border-right">
+      <section class="border-bottom col-height-100 flex ">
+        <div class="mobile-title">
+          <h2>Fuller Life Details</h2>
+        </div>
+      </section>
+      {tableData.map((view, ctr) => (
+        <section class={`border-bottom ${ctr % 2 === 0 ? 'bg-gray' : ''} `}>
+          <Fragment set:html={view.package_description} />
+        </section>
+      ))}
+      <section class="border-top">
+        <div class="col-height-70 flex relative">
+
+        </div>
+      </section>
+    </div>
+    <div id="package-name-premium" class="table-column package-name premium tc-width-15 border-right plan-scale-up">
+      <div class="box-shadow">
+        <section class="border-bottom col-height-100 flex">
+          <div class="mobile-title title ml-2 md:top-4 md:z-20">
+            <h2>{price.premium.title}</h2>
+          </div>
+        </section>
+        {tableData.map((view, ctr) => (
+          <section class={`border-bottom ${view.is_premium ? 'ischeck' : ''} ${ctr % 2 === 0 ? 'bg-gray' : ''} visible-desktop`}>
+            <div class="col-height-40 flex plan-container relative ">
+              <div class="check"></div>
+            </div>
+          </section>
+        ))}
+
+        <div class="visible-mobile">
+          <div class="elementor-widget-container init-show">
+            <span class="list-text">{price.premium.mobile_desc_header}</span>
+          </div>
+          <div class="init-hide">
+            <hr>
+            {tableData.map((viewPlatinum) => (
+              viewPlatinum.is_premium && (
+                <Fragment set:html={viewPlatinum.package_description} />
+              )
+            ))}
+            <hr>
+          </div>
+          <span class="list-text hide-desktop"><button onclick="myFunctionPremium()" class=" items-baseline pt-[0.055rem] drop-shadow-lg active:drop-shadow-none rounded-lg h-6 px-2 text-xs font-medium transition-colors bg-accent-base text-bgColor hover:brightness-105">View details ></button></span>
+        </div>
+        <section class="price border-top">
+          <div class="flex col-height-70 relative text-center">
+            <span class="list-text">${price.premium.before_gst} <span>(BF/GST)</span><br><strong>${price.premium.after_gst} <span>(AF/GST)</span></strong></span>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="package-name-gold" class="table-column package-name gold tc-width-15 border-right plan-scale-up">
+      <div class="box-shadow">
+        <section class="border-bottom col-height-100 flex">
+          <div class="mobile-title title ml-2 md:top-4 md:z-20">
+            <h2>{price.gold.title}</h2>
+          </div>
+        </section>
+        {tableData.map((view, ctr) => (
+          <section class={`border-bottom ${view.is_gold ? 'ischeck' : ''} ${ctr % 2 === 0 ? 'bg-gray' : ''} visible-desktop`}>
+            <div class="col-height-40 flex plan-container relative ">
+              <div class="check"></div>
+            </div>
+          </section>
+        ))}
+
+        <div class="visible-mobile">
+          <div class="elementor-widget-container init-show">
+            <span class="list-text">{price.gold.mobile_desc_header}</span>
+          </div>
+          <div class="init-hide">
+            <hr>
+            {tableData.map((viewPlatinum) => (
+              viewPlatinum.is_gold && (
+                <Fragment set:html={viewPlatinum.package_description} />
+              )
+            ))}
+            <hr>
+          </div>
+          <span class="list-text hide-desktop"><button onclick="myFunctionGold()" class=" items-baseline pt-[0.055rem] drop-shadow-lg active:drop-shadow-none rounded-lg h-6 px-2 text-xs font-medium transition-colors bg-accent-base text-bgColor hover:brightness-105">View details ></button></span>
+        </div>
+        <section class="price border-top">
+          <div class="flex col-height-70 relative text-center">
+            <span class="list-text">${price.gold.before_gst} <span>(BF/GST)</span><br><strong>${price.gold.after_gst} <span>(AF/GST)</span></strong></span>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="package-name-sapphire" class="table-column package-name sapphire tc-width-15 border-right plan-scale-up">
+      <div class="box-shadow">
+        <section class="border-bottom col-height-100 flex">
+          <div class="mobile-title title ml-2 md:top-4 md:z-20">
+            <h2>{price.sapphire.title}</h2>
+          </div>
+        </section>
+        {tableData.map((view, ctr) => (
+          <section class={`border-bottom ${view.is_sapphire ? 'ischeck' : ''} ${ctr % 2 === 0 ? 'bg-gray' : ''} visible-desktop`}>
+            <div class="col-height-40 flex plan-container relative ">
+              <div class="check"></div>
+            </div>
+          </section>
+        ))}
+
+        <div class="visible-mobile">
+          <div class="elementor-widget-container init-show">
+            <span class="list-text">{price.sapphire.mobile_desc_header}</span>
+          </div>
+          <div class="init-hide">
+            <hr>
+            {tableData.map((viewPlatinum) => (
+              viewPlatinum.is_sapphire && (
+                <Fragment set:html={viewPlatinum.package_description} />
+              )
+            ))}
+            <hr>
+          </div>
+          <span class="list-text hide-desktop"><button onclick="myFunctionSapphire()" class=" items-baseline pt-[0.055rem] drop-shadow-lg active:drop-shadow-none rounded-lg h-6 px-2 text-xs font-medium transition-colors bg-accent-base text-bgColor hover:brightness-105">View details ></button></span>
+        </div>
+        <section class="price border-top">
+          <div class="flex col-height-70 relative text-center">
+            <span class="list-text">${price.sapphire.before_gst} <span>(BF/GST)</span><br><strong>${price.sapphire.after_gst} <span>(AF/GST)</span></strong></span>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div id="package-name-platinum" class="table-column package-name platinum tc-width-15 plan-scale-up">
+      <div class="box-shadow">
+        <section class="border-bottom col-height-100 flex">
+          <div class="mobile-title  title ml-2 md:top-4 md:z-20">
+            <h2>{price.platinum.title}</h2>
+          </div>
+        </section>
+        {tableData.map((view, ctr) => (
+          <section class={`border-bottom ${view.is_platinum ? 'ischeck' : ''} ${ctr % 2 === 0 ? 'bg-gray' : ''} visible-desktop`}>
+            <div class="col-height-40 flex plan-container relative ">
+              <div class="check"></div>
+            </div>
+          </section>
+        ))}
+
+        <div class="visible-mobile">
+          <div class="elementor-widget-container init-show">
+            <span class="list-text">{price.platinum.mobile_desc_header}</span>
+          </div>
+          <div class="init-hide">
+            <hr>
+            {tableData.map((viewPlatinum) => (
+              viewPlatinum.is_platinum && (
+                <div class="plan-container relative">
+                  <Fragment set:html={viewPlatinum.package_description} />
+                </div>
+              )
+            ))}
+            <hr>
+          </div>
+          <span class="list-text hide-desktop"><button onclick="myFunctionPlatinum()" class=" items-baseline pt-[0.055rem] drop-shadow-lg active:drop-shadow-none rounded-lg h-6 px-2 text-xs font-medium transition-colors bg-accent-base text-bgColor hover:brightness-105">View details ></button></span>
+        </div>
+        <section class="price border-top">
+          <div class="flex col-height-70 relative text-center">
+            <span class="list-text">${price.platinum.before_gst} <span>(BF/GST)</span><br><strong>${price.platinum.after_gst} <span>(AF/GST)</span></strong></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:inline>
+#customtable {
+    --e-global-color-primary: #0d6efd;
+    --e-global-color-secondary: #0d6efd;
+    background: #f4f5f6;
+}
+#customtable section {
+    padding: 5px 10px;
+} 
+#customtable .bg-gray {
+    background: #f8f9fa;
+} 
+
+#customtable .text-center {
+    text-align: center;
+} 
+#customtable .table-container {
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    border-radius: 10px;
+    box-shadow:0px 3px 10px 0px rgba(0,0,0,0.5);
+}
+#customtable .border-bottom {
+    border-bottom: 1px solid #58626524 !important;
+}
+#customtable .border-top {
+    border-top: 1px solid #58626524;
+}
+#customtable .hide-desktop {
+    display: none;
+}
+#customtable .border-right {
+    border-right: 1px solid #58626524;
+}
+#customtable .col-height-100 {
+    height: 100px;
+}
+#customtable .col-height-70 {
+    height: 70px;
+}
+#customtable .col-height-50 {
+    height: 50px;
+}
+#customtable .col-height-40 {
+    height: 40px;
+}
+#customtable .table-container .ischeck .check {
+    display: inline-block;
+    transform: rotate(45deg);
+    height: 24px;
+    width: 12px;
+    border-bottom: 5px solid var(--e-global-color-secondary );
+    border-right: 5px solid var(--e-global-color-secondary );
+    position: absolute;
+    left: 50%;
+}  
+#customtable .table-container .list-text, #customtable .table-container .list-text p {
+    font-size: 16px;
+}
+#customtable .table-container section.price .list-text span {
+	font-size: 12px;
+}
+
+#customtable .table-container h2 {
+    font-family: "Effra", Helvetica, Sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    /* letter-spacing: 2px; */
+    text-align: center;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+#customtable .tc-width-40 {
+    width: 46%;
+}
+#customtable .tc-width-15 {
+    width: 13.5%;
+}
+#customtable .flex {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+#customtable .flex.text-center {
+    justify-content: center;
+}
+#customtable .relative {
+    position: relative;
+}
+#customtable .plan-container .list-text {
+    cursor: pointer;
+}
+#customtable .plan-container .details {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #ccc;
+    opacity: 0;    
+    position: absolute !important;
+    left: 0;
+    top: 40px;
+    background: #fff;
+    z-index: -999;
+    height: 0;
+    max-width: 350px !important;
+    width: 100% !important;
+    transform: scaleY(0);
+    transition: transform .4s;
+    transform-origin: top;
+}
+#customtable .plan-container .details ul li {
+    margin: 10px 0;
+}
+#customtable .plan-container:hover .details, #customtable .plan-container:focus .details {
+    z-index: 999;
+    opacity: 1;
+    height: auto;
+    transform: scaleY(1);
+}
+#customtable .plan-container .elementor-icon-list-icon {
+    transition: all 300ms ease-in;
+    float: left;
+}
+#customtable .plan-container:hover .elementor-icon-list-icon, #customtable .plan-container:focus .elementor-icon-list-icon {
+    transform: rotate(-90deg);
+}
+#customtable .plan-container .tooltip, #customtable .has-tooltip .sub-tooltip {
+    padding: 10px 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #ccc;
+    opacity: 0;    
+    position: absolute !important;
+    left: 0;
+    top: 40px;
+    background: var(--e-global-color-primary);
+    color: white;
+    z-index: -999;
+    height: 0;
+    width: 330px !important;
+    transition: all 300ms ease-in;
+    animation: all 300ms ease-in;
+    font-size: 16px;
+    text-align: center;
+    transform: scaleY(0);
+    transition: transform .4s;
+    transform-origin: top;
+}
+#customtable .plan-container:hover .tooltip, #customtable .plan-container:focus .tooltip, #customtable .has-tooltip:hover .sub-tooltip, #customtable .has-tooltip:focus .sub-tooltip  {
+    z-index: 999;
+    opacity: 1;
+    height: auto;
+    transform: scaleY(1);
+}
+#customtable .visible-mobile {
+    display: none;
+}
+#customtable .plan-scale-up {
+    transform: scale(1);
+    transition: transform .4s;
+    transform-origin: center;
+    
+}
+#customtable .plan-scale-up:hover {
+    margin: -2px 0;
+    z-index: 1;
+    background: #f4f5f6;
+    border: 1px solid #0000001f !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 5px 0 var(--e-global-color-02ec3bb);
+    border-radius: 5px;
+    transition: transform .4s;
+    transform-origin: center;
+}
+
+#customtable .mobile-title {
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    #customtable section {
+        padding: 5px;
+    }
+}
+
+@media (max-width: 991px) {
+    #customtable .table-container .list-text, #customtable .table-container .list-text p {
+        font-size: 18px;
+        line-height: 24px;
+    }
+    #customtable .table-container section.price .list-text {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    #customtable .table-container h2 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+    #customtable .tc-width-40 {
+    width: 40%;
+    }
+    #customtable .tc-width-15 {
+        width: 15%;
+    }
+}
+
+@media(max-width: 767px) {
+    #customtable .table-container {
+        flex-direction: column;
+        max-width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    #customtable .table-container .package-details {
+        display: none !important; 
+    }
+    
+    #customtable .tc-width-15 {
+        width:100%;
+    }
+    #customtable .table-container h2 {
+        font-size: 24px;
+        font-weight: 600;
+        padding: 15px 10px;
+        text-align: left;
+    }
+    #customtable .package-name {
+        border: none;
+        margin: 20px 0;
+    }
+    #customtable .package-name .box-shadow {
+        border-radius: 10px;
+        box-shadow: 5px 5px 10px 0px rgb(0 0 0 / 26%);
+    }
+    #customtable .plan-scale-up:hover {
+        box-shadow: none;
+    }
+    #customtable .plan-scale-up:hover .box-shadow {
+        box-shadow: 5px 5px 10px 0px rgb(0 0 0 / 26%);
+    }
+    #customtable .package-name.border-right {
+        border: none !important;
+    }
+    #customtable .package-name .mobile-title {
+        z-index: 999;
+        position: relative;
+    }
+    #customtable .plan-scale-up:hover {
+        transform: none !important;
+        margin: 20px 0 !important;
+    }
+    #customtable .visible-desktop {
+        display: none;
+    }
+
+    #customtable .visible-mobile {
+        display: block;
+    }
+    #customtable .visible-mobile .init-show {
+        display: block;
+    }
+    #customtable .visible-mobile .init-hide {
+        opacity: 0;
+        height: 0;
+        transition: all 100ms ease-in-out;
+        z-index: 0;
+        position: relative;
+        display: none;
+        z-index: 9;
+    }
+    #customtable .visible-mobile .init-hide .plan-container {
+        padding: 10px 10px;
+    }
+
+    #customtable .package-name {
+        /* transform: rotateY(0) !important; */
+        /* transition: all 1200ms ease-in-out; */
+    }
+    #customtable .package-name.show-hidden {
+        /* transform: rotateY(360deg) !important; */
+        transition: all 300ms ease-in-out;
+    }
+    #customtable .package-name.show-hidden .init-hide {
+        opacity: 1 !important;
+        height: 100% !important;
+        transition: all 300ms ease-in-out;
+        display: block;
+    }
+    #customtable .elementor-widget-container {
+        padding: 7px 15px;
+    }
+    #customtable .table-container ul li {
+        color: var(--e-global-color-02ec3bb);
+    }
+    .customtable .border-bottom,  hr {
+        border-bottom: 1px solid #58626524 !important
+    }
+    hr {
+        border-top: 1px solid #58626524;
+    }
+    #customtable .table-container section.price .flex.text-center {
+        justify-content: flex-end;
+        padding: 0 10px;
+    }
+    #customtable .table-container section.price .list-text {
+        font-size: 20px;
+        line-height: 28px;
+    }
+    #customtable .hide-desktop {
+        display: block;
+    }
+    #customtable .init-hide div:hover > ul {
+        display: block !important;
+    }
+    #customtable .init-hide div:hover > .details {
+        display: block !important;
+        opacity: 1;
+        padding: 0;
+        left: 0;
+        transform: scaleY(1);
+    }
+    #customtable .init-hide div:hover > .details.tooltip {
+        display: block !important;
+        opacity: 1;
+        padding: 0;
+        left: 0;
+        transform: scaleY(1);
+    }
+    #customtable section.price {
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+    #customtable .hide-desktop {
+        padding: 10px 0;
+    }
+    /* #customtable .hide-desktop a, #customtable .hide-desktop button  {
+        color: var(--e-global-color-primary);
+        font-weight: 300;
+        text-transform: uppercase;
+        font-size: 14px;
+        position: relative;
+        z-index: 9999;
+        background: transparent;
+        border: none;
+    } */
+    #customtable .plan-container .elementor-icon-list-icon {
+        top: 5px;
+    }
+    #customtable .table-container .visible-mobile .list-text {
+      position: relative;
+      z-index: 0;
+    }
+}
+@media(max-width: 650px) {
+    #customtable .table-container {
+        grid-template-columns: repeat(1, 1fr);
+        max-width: 500px;
+    }
+}
+
+.material-symbols-light--arrow-drop-down {
+  display: inline-block;
+  width: 24px;
+  height: 32px;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 14.308L8.192 10.5h7.616z'/%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+</style>
+<script is:inline>
+    function myFunctionPremium() {
+        var element = document.getElementById("package-name-premium");
+        element.classList.toggle("show-hidden");
+    }
+
+    function myFunctionGold() {
+        var element = document.getElementById("package-name-gold");
+        element.classList.toggle("show-hidden");
+    }
+
+    function myFunctionSapphire() {
+        var element = document.getElementById("package-name-sapphire");
+        element.classList.toggle("show-hidden");
+    }
+
+    function myFunctionPlatinum() {
+        var element = document.getElementById("package-name-platinum");
+        element.classList.toggle("show-hidden");
+    }
+</script>
