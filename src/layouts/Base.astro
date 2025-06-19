@@ -12,8 +12,9 @@ interface Props {
 }
 
 const {
-	meta: { articleDate, description = siteConfig.description, ogImage, title },
+	meta: { articleDate, description = siteConfig.description, ogImage, title, bodyClass },
 } = Astro.props;
+
 ---
 
 <html
@@ -23,7 +24,7 @@ const {
 	<head>
 		<BaseHead articleDate={articleDate} description={description} ogImage={ogImage} title={title} />
 	</head>
-	<body class="min-w-4xl relative m-auto min-h-screen w-full grow bg-bgColor">
+	<body class={`min-w-4xl relative m-auto min-h-screen w-full grow bg-bgColor ${bodyClass}`} >
 		
 			<!-- <ThemeProvider /> -->
 			<SkipLink />
@@ -35,7 +36,7 @@ const {
 				<div id="container" class="min-w-3xl relative m-auto grow">
 					<div class="m-auto grid min-h-screen md:grid-rows-[auto_auto_1fr]">
 						<Header />
-						<main id="main" class="relative flex-grow">
+						<main id="main" class="relative flex-grow mt-[80px] sm:mt-20 md:mt-0">
 							<slot />
 						</main>
 						<Footer />

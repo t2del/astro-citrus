@@ -8,7 +8,7 @@ import { Icon } from "astro-icon/components";
 
 <header
 	id="main-header"
-	class="fixed px-4 md:px-0 left-0 z-20 flex items-center m-auto md:relative top-0 h-16 w-full bg-bgColor md:bg-transparent overflow-hidden max-w-[1440px]"
+	class="fixed px-4 md:px-0 left-0 z-20 flex items-center m-auto md:relative top-0 h-16 w-full bg-bgColor md:bg-transparent overflow-hidden max-w-[1440px] px-2 md:px-2"
 >		
 	<div class="w-full justify-between sm:flex-col">
 		<div class="flex items-center gap-x-2">
@@ -99,7 +99,13 @@ import { Icon } from "astro-icon/components";
 					))
 				}
 				</ul>
-				
+				<a
+					class="flex h-8 items-center rounded-lg bg-accent-base/5 px-4 text-accent-base underline-offset-2 hover:bg-accent-base/10"
+					data-astro-prefetch
+					href="/posts/citrus-docs/intro/"
+				>
+					Docs
+				</a>
 			</nav>
 			<div class="ml-auto w-fit">
 				<div id="buttons-panel" class="top-4 md:top-8 -ml-[4.5rem] flex space-x-2">

@@ -38,11 +38,10 @@ const { counter, string = '', message = '', logo = '' } = Astro.props;
     }
 </style>
 <script is:inline>
-  // Basic script to animate the counter from 0 to data-target
   document.addEventListener('DOMContentLoaded', () => {
     const counters = document.querySelectorAll('.counter');
 
-    counters.forEach(counterSpan => {
+    const animateCounter = (counterSpan) => {
       const target = +counterSpan.getAttribute('data-target');
       const increment = target / 200; // Adjust for desired animation speed
 
@@ -57,6 +56,23 @@ const { counter, string = '', message = '', logo = '' } = Astro.props;
         }
       };
       updateCounter();
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // If the counter is on screen, start the animation
+          animateCounter(entry.target);
+          // Stop observing once animation has started for this counter
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.5 // Trigger when 50% of the element is visible
+    });
+
+    counters.forEach(counterSpan => {
+      observer.observe(counterSpan);
     });
   });
 </script>

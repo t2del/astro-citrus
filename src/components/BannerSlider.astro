@@ -1,5 +1,28 @@
 ---
-// BannerSlider.astro
+// Usage
+// import BannerSlider from '@/components/BannerSlider.astro';
+
+// const sliderData = [
+//   {
+//     imageURL: '/images/banner1.jpg',
+//     alt: 'Banner Image 1',
+//     header: 'Welcome to Our Website',
+//     description: 'Discover amazing products and services.'
+//   },
+//   {
+//     imageURL: '/images/banner2.jpg',
+//     alt: 'Banner Image 2',
+//     header: 'Special Offers Available',
+//     description: 'Limited-time deals you don\'t want to miss!'
+//   },
+//   {
+//     imageURL: '/images/banner3.jpg',
+//     alt: 'Banner Image 3',
+//     header: 'Explore Our New Collection',
+//     description: 'Fresh arrivals are waiting for you.'
+//   }
+// ];
+// end Usage
 
 
 interface Props {
@@ -13,95 +36,27 @@ interface Props {
 
 const { slides } = Astro.props;
 ---
-
-<div class="banner-slider">
-  {slides.map((slide) => (
-    <div class="slide">
-      <div class="image-container">
-        <img src={slide.imageURL} alt={slide.alt} class="banner-image" />
+<div class="relative">
+  <div class="banner-slider ">
+    {slides.map((slide) => (
+      <div class="slide">
+        <div class="image-container">
+          <img src={slide.imageURL} alt={slide.alt} class="banner-image" />
+        </div>
+        <div class="text-overlay">
+          <h2 class="banner-header">{slide.header}</h2>
+          <p class="banner-description">{slide.description}</p>
+        </div>
       </div>
-      <div class="text-overlay">
-        <h2 class="banner-header">{slide.header}</h2>
-        <p class="banner-description">{slide.description}</p>
-      </div>
-    </div>
-  ))}
-</div>
-<div class="navigation-container"> </div>
-<div class="dots">
-    {slides.map((_, index) => (
-      <button class="dot" data-index={index}></button>
     ))}
+  </div>
+  <div class="navigation-container flex  grow items-center justify-between max-w-[90vw] m-auto"> </div>
+  <div class="dots">
+      {slides.map((_, index) => (
+        <button class="dot" data-index={index}></button>
+      ))}
+  </div>
 </div>
- <style is:inline>
-    .banner-slider {
-      position: relative;
-      width: 100%;
-      overflow: hidden; /* Hide overflowing slides */
-      padding-bottom: 50%;
-    }
-    .slide {
-        position: absolute; /* Keep this for the sliding effect */
-        width: 100%;
-        opacity: 0; /* Initially hide all slides using opacity */
-        transition: opacity 0.5s ease-in-out; /* Optional transition for smoother fading */
-    }
-    .slide.active {
-        opacity: 1; /* Make the active slide visible */
-        z-index: 9;
-    }
-    .image-container {
-      width: 100%;
-      height: auto; /* Adjust height as needed or set a fixed value */
-    }
-    .banner-image {
-      display: block;
-      width: 100%;
-      height: auto;
-      object-fit: cover; /* Ensure the image covers the container */
-    }
-    .text-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: white; /* Adjust text color as needed */
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.5); /* Optional background for better readability */
-      border-radius: 8px; /* Optional rounded corners */
-    }
-
-    .banner-header {
-      font-size: 2em; /* Adjust font size as needed */
-      margin-bottom: 10px;
-    }
-
-    .banner-description {
-      font-size: 1.2em; /* Adjust font size as needed */
-    }
-    .dots {
-        display: flex;
-        gap: 8px; /* Space between dots */
-        justify-content: center;
-        position: relative;
-        z-index: 3;
-  }
-
-  .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5); /* Inactive dot color */
-    border: none;
-    cursor: pointer;
-    padding: 0;
-  }
-
-  .dot.active {
-    background-color: white; /* Active dot color */
-  }
-</style>
 <script is:inline>
     const dotsContainer = document.querySelector('.dots');
     const dots = document.querySelectorAll('.dot');
@@ -168,7 +123,7 @@ const { slides } = Astro.props;
   const sliderContainer = document.querySelector('.navigation-container');
   if (sliderContainer) {
     const nextButton = document.createElement('button');
-    nextButton.textContent = '<';
+    nextButton.innerHTML = '<span class="material-symbols-light--arrow-back-ios-new-rounded"></span>';
     nextButton.classList.add('slider-button', 'next'); // Add some classes for styling
     nextButton.addEventListener('click', () => {
       stopAutoSlide(); // Stop auto-sliding on manual navigation
@@ -178,7 +133,7 @@ const { slides } = Astro.props;
     sliderContainer.appendChild(nextButton);
 
     const prevButton = document.createElement('button');
-    prevButton.textContent = '>';
+    prevButton.innerHTML = '<span class="material-symbols-light--arrow-forward-ios-rounded"></span>';
     prevButton.classList.add('slider-button', 'prev'); // Add some classes for styling
     prevButton.addEventListener('click', () => {
       stopAutoSlide(); // Stop auto-sliding on manual navigation
@@ -191,3 +146,219 @@ const { slides } = Astro.props;
   // Show the initial slide
   showSlide(currentIndex);
 </script>
+
+<style is:inline>
+/* Base Styles */
+.banner-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Hide overflowing slides */
+  padding-bottom: 50%; /* Aspect ratio for desktop (e.g., 2:1) */
+}
+
+.slide {
+  position: absolute; /* Keep this for the sliding effect */
+  width: 100%;
+  height: 100%; /* Ensure slide takes full height of the slider */
+  opacity: 0; /* Initially hide all slides using opacity */
+  transition: opacity 0.5s ease-in-out; /* Optional transition for smoother fading */
+}
+
+.slide.active {
+  opacity: 1; /* Make the active slide visible */
+  z-index: 9;
+}
+
+.image-container {
+  width: 100%;
+  height: 100%; /* Ensure image container takes full height of the slide */
+}
+
+.banner-image {
+  display: block;
+  width: 100%;
+  height: 100%; /* Ensure image covers the container */
+  object-fit: cover; /* Ensure the image covers the container */
+  object-position: center; /* Center the image within the container */
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white; /* Adjust text color as needed */
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional background for better readability */
+  border-radius: 8px; /* Optional rounded corners */
+  max-width: 90%; /* Prevent text from overflowing on smaller screens */
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+.banner-header {
+  font-size: 2em; /* Adjust font size as needed */
+  margin-bottom: 10px;
+}
+
+.banner-description {
+  font-size: 1.2em; /* Adjust font size as needed */
+}
+
+.dots {
+  display: flex;
+  gap: 8px; /* Space between dots */
+  justify-content: center;
+  position: absolute; /* Position dots relative to the slider */
+  bottom: 20px; /* Adjust vertical position */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; /* Ensure dots are above the slides */
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5); /* Inactive dot color */
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: white; /* Active dot color */
+}
+.navigation-container {
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
+.material-symbols-light--arrow-back-ios-new-rounded {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='m8.82 12l7.715 7.716q.22.22.218.528t-.224.529q-.221.221-.529.221t-.529-.221L7.83 13.136q-.243-.242-.354-.54q-.112-.298-.112-.596t.112-.596t.354-.54l7.64-7.644q.221-.221.532-.218q.31.003.531.224t.222.529t-.222.528z'/%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+.material-symbols-light--arrow-forward-ios-rounded {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M15.187 12L7.47 4.285q-.221-.221-.218-.532q.003-.31.224-.532Q7.698 3 8.009 3q.31 0 .532.221l7.636 7.643q.242.242.354.54t.111.596t-.111.596t-.354.54L8.535 20.78q-.222.221-.53.218q-.307-.003-.528-.224t-.221-.532t.221-.531z'/%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+button.slider-button {
+    padding: 5px 5px;
+    background: #cccccc70;
+    border-radius: 50%;
+    display: flex;
+    transition: all 0.3s ease;
+}
+button.slider-button:hover, button.slider-button:focus {
+    background: #cccccc;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Styles */
+
+/* Mobile devices (e.g., up to 767px) */
+@media (max-width: 767px) {
+  .banner-slider {
+    padding-bottom: 75%; /* Adjust aspect ratio for mobile (e.g., 4:3) */
+  }
+
+  .text-overlay {
+    padding: 10px;
+    max-width: 330px;
+    width: 100%;
+  }
+
+  .banner-header {
+    font-size: 1.5em; /* Smaller font size for mobile */
+    margin-bottom: 5px;
+  }
+
+  .banner-description {
+    font-size: 1em; /* Smaller font size for mobile */
+  }
+
+  .dots {
+    bottom: 10px; /* Adjust dot position for mobile */
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Tablet devices (e.g., 768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .banner-slider {
+    padding-bottom: 60%; /* Slightly taller aspect ratio for tablets */
+  }
+
+  .text-overlay {
+    padding: 15px;
+  }
+
+  .banner-header {
+    font-size: 1.8em;
+  }
+
+  .banner-description {
+    font-size: 1.1em;
+  }
+
+  .dots {
+    bottom: 15px;
+  }
+}
+
+/* Desktop devices (e.g., 1024px and above) */
+@media (min-width: 1024px) {
+  .banner-slider {
+    padding-bottom: 40%; /* Wider aspect ratio for large desktops (e.g., 16:9) */
+  }
+
+  .text-overlay {
+    padding: 30px;
+    max-width: 800px; /* Limit max width for text overlay on very large screens */
+  }
+
+  .banner-header {
+    font-size: 2.5em;
+  }
+
+  .banner-description {
+    font-size: 1.4em;
+  }
+
+  .dots {
+    bottom: 25px;
+  }
+
+  .dot {
+    width: 14px;
+    height: 14px;
+  }
+}
+</style>

@@ -20,7 +20,7 @@ const allNotes = await getCollection("note");
 const latestNotes = allNotes.sort(collectionDateSort).slice(0, MAX_NOTES);
 
 import CounterUp from "@/components/CounterUp.astro";
-import Quiz from '@/components/Quiz.astro';
+import Quiz2 from '@/components/Quiz2.astro';
 import EhsFullerLive from "@/components/ehs-fuller-live.astro";
 import BannerSlider from '@/components/BannerSlider.astro';
 
@@ -46,7 +46,7 @@ const sliderData = [
 ];
 ---
 
-<PageLayout meta={{ title: "Home" }}>
+<PageLayout meta={{ title: "Home", description: "Welcome to our website", bodyClass: "home" }}>
 	<!-- Hero section -->
 	  <section aria-label="Banner Slider" class="">
 		<BannerSlider slides={sliderData} />
@@ -94,7 +94,7 @@ const sliderData = [
 
 	<section aria-label="EHS Interactive Quiz" class="flex items-center justify-center px-2 md:px-2 md:pt-4">
 		<div class="container max-w-[1440px]">
-			<Quiz  />
+			<Quiz2  />
 		</div>
 	</section>
 	<section aria-label="EHS Table" class="flex items-center justify-center px-2 md:px-2 md:pt-4">

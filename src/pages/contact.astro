@@ -1,0 +1,279 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import SocialList from "@/components/SocialList.astro";
+import PostPreview from "@/components/blog/PostPreview.astro";
+import Note from "@/components/note/Note.astro";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+
+
+---
+
+<PageLayout meta={{ title: "Contact", description: "Welcome to our website", bodyClass: "contact" }}>
+	<section aria-label="Achievement" class="flex items-center justify-center px-2 md:px-2 md:pt-2  h-screen">
+		<div class="container max-w-[1440px] grid grid-cols-1 gap-2 xs:grid-cols-1 sm:grid-cols-1  md:grid-cols-1">
+			<div class="w-full text-center flex justify-center space-x-4 mt-4">
+				<div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md md:max-w-lg lg:max-w-xl">
+					<h2 class="text-4xl title bg-gradient-to-r from-accent-two/85 via-accent-one/85 to-accent-two/85 dark:from-accent-two dark:via-accent-one dark:to-accent-two bg-clip-text text-transparent">Get in Touch</h2>
+					<!--
+						Formspree form:
+						- Replace "YOUR_FORMSPREE_ENDPOINT" with your actual Formspree endpoint.
+						- The method is POST, and the form will submit to Formspree.
+						- Tailwind classes are used for responsive styling.
+					-->
+					<form id="contactForm" action="https://formspree.io/f/xnndyvdq" method="POST" class="space-y-6">
+						<div>
+							<label for="name" class="mt-4 mb-4 text-lg font-medium">Name</label>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								placeholder="Your Full Name"
+								required
+								class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base outline-none transition duration-150 ease-in-out"
+							>
+							<p id="nameError" class="error-message hidden"></p>
+						</div>
+
+						<div>
+							<label for="email" class="mt-4 mb-4 text-lg font-medium">Email</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								placeholder="your.email@example.com"
+								required
+								class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base outline-none transition duration-150 ease-in-out"
+							>
+							<p id="emailError" class="error-message hidden"></p>
+						</div>
+
+						<div>
+							<label for="phone" class="mt-4 mb-4 text-lg font-medium">Phone</label>
+							<input
+								type="tel"
+								id="phone"
+								name="phone"
+								placeholder="e.g., +1 555 123 4567"
+								class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base outline-none transition duration-150 ease-in-out"
+							>
+							<p id="phoneError" class="error-message hidden"></p>
+						</div>
+
+						<div>
+							<label for="message" class="mt-4 mb-4 text-lg font-medium">Message</label>
+							<textarea
+								id="message"
+								name="message"
+								rows="5"
+								placeholder="Type your message here..."
+								required
+								class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base outline-none transition duration-150 ease-in-out resize-y"
+							></textarea>
+							<p id="messageError" class="error-message hidden"></p>
+						</div>
+						<div class="flex justify-center space-x-4 mt-4">
+							<button
+								type="submit"
+								id="submitButton"
+								class="relative flex items-center justify-center h-8 px-4 rounded-lg shadow-lg hover:brightness-110 transition-all bg-gradient-to-r from-accent-one to-accent-two"
+							>
+								<span class="text-bgColor font-semibold">
+									Send Message
+								</span>
+							</button>
+						</div>
+					</form>
+
+					<div id="messageBox" class="hidden mt-6 p-4 rounded-md text-center" role="alert">
+						<p id="messageText" class="font-medium"></p>
+						<button id="closeMessageBox" class="mt-2 text-sm font-semibold text-gray-700 hover:text-gray-900 focus:outline-none">Close</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+</PageLayout>
+
+<style is:inline>
+	/* Custom font for a clean look */
+	body {
+		font-family: "Inter", sans-serif;
+	}
+	/* Style for error messages */
+	.error-message {
+		color: #ef4444; /* Tailwind red-500 */
+		font-size: 0.875rem; /* text-sm */
+		margin-top: 0.25rem; /* mt-1 */
+	}
+</style>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('contactForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const messageInput = document.getElementById('message');
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+            const messageError = document.getElementById('messageError');
+            const submitButton = document.getElementById('submitButton');
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            const closeMessageBox = document.getElementById('closeMessageBox');
+
+            // Function to show a message in the custom message box
+            function showMessageBox(text, type) {
+                messageText.textContent = text;
+                messageBox.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+                if (type === 'success') {
+                    messageBox.classList.add('bg-green-100', 'text-green-800');
+                } else if (type === 'error') {
+                    messageBox.classList.add('bg-red-100', 'text-red-800');
+                }
+                messageBox.classList.add('block'); // Show the message box
+            }
+
+            // Function to hide the message box
+            function hideMessageBox() {
+                messageBox.classList.add('hidden');
+            }
+
+            // Event listener for closing the message box
+            closeMessageBox.addEventListener('click', hideMessageBox);
+
+            // Function to display error messages
+            function displayError(element, message) {
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+
+            // Function to hide error messages
+            function hideError(element) {
+                element.textContent = '';
+                element.classList.add('hidden');
+            }
+
+            // Basic email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            // Form validation function
+            function validateForm() {
+                let isValid = true;
+
+                // Validate Name
+                if (nameInput.value.trim() === '') {
+                    displayError(nameError, 'Name is required.');
+                    isValid = false;
+                } else {
+                    hideError(nameError);
+                }
+
+                // Validate Email
+                if (emailInput.value.trim() === '') {
+                    displayError(emailError, 'Email is required.');
+                    isValid = false;
+                } else if (!emailRegex.test(emailInput.value.trim())) {
+                    displayError(emailError, 'Please enter a valid email address.');
+                    isValid = false;
+                } else {
+                    hideError(emailError);
+                }
+
+                // Validate Message
+                if (messageInput.value.trim() === '') {
+                    displayError(messageError, 'Message is required.');
+                    isValid = false;
+                } else {
+                    hideError(messageError);
+                }
+
+                // Phone is optional, no validation needed unless specified
+
+                return isValid;
+            }
+
+            // Event listener for form submission
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                hideMessageBox(); // Hide any previous messages
+
+                if (!validateForm()) {
+                    showMessageBox('Please correct the errors in the form.', 'error');
+                    return; // Stop if validation fails
+                }
+
+                submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+                submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+                const formData = new FormData(form);
+                const formUrl = form.action;
+
+                try {
+                    const response = await fetch(formUrl, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json' // Important for Formspree AJAX
+                        }
+                    });
+
+                    if (response.ok) {
+                        showMessageBox('Your message has been sent successfully!', 'success');
+                        form.reset(); // Clear form fields on success
+                        // Hide all error messages after successful submission
+                        hideError(nameError);
+                        hideError(emailError);
+                        hideError(messageError);
+                    } else {
+                        const errorData = await response.json();
+                        let errorMessage = 'Oops! There was an error sending your message.';
+                        if (errorData && errorData.errors) {
+                            errorMessage += ' ' + errorData.errors.map(err => err.message).join(', ');
+                        }
+                        showMessageBox(errorMessage, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showMessageBox('Network error or unexpected issue. Please try again later.', 'error');
+                } finally {
+                    submitButton.textContent = 'Send Message';
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+
+            // Add real-time validation feedback on input blur
+            nameInput.addEventListener('blur', () => {
+                if (nameInput.value.trim() === '') {
+                    displayError(nameError, 'Name is required.');
+                } else {
+                    hideError(nameError);
+                }
+            });
+
+            emailInput.addEventListener('blur', () => {
+                if (emailInput.value.trim() === '') {
+                    displayError(emailError, 'Email is required.');
+                } else if (!emailRegex.test(emailInput.value.trim())) {
+                    displayError(emailError, 'Please enter a valid email address.');
+                } else {
+                    hideError(emailError);
+                }
+            });
+
+            messageInput.addEventListener('blur', () => {
+                if (messageInput.value.trim() === '') {
+                    displayError(messageError, 'Message is required.');
+                } else {
+                    hideError(messageError);
+                }
+            });
+        });
+</script>
